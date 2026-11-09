@@ -71,15 +71,15 @@ function App() {
             scrolled ? 'text-gray-900' : 'text-white'
           }`}
         >
-          ICRCCT 2k26
+          ICRCCT 2026
         </span>
       </div>
 
       {/* Desktop Download Button */}
       <div className="hidden md:flex items-center space-x-4">
         <a
-          href="/images/poster/icrcct2k25.pdf"
-          download="ICRCCT_2k26_Poster.pdf"
+          href="/images/poster/icrcct2026.pdf"
+          download="ICRCCT_2026_Poster.pdf"
           className={`px-4 py-2 rounded-lg transition-colors duration-300 ${
             scrolled
               ? 'bg-blue-600 text-white hover:bg-blue-700'
@@ -139,8 +139,8 @@ function App() {
 
         {/* Mobile Download Button */}
         <a
-          href="/images/poster/icrcct2k25.pdf"
-          download="ICRCCT_2k26_Poster.pdf"
+          href="/images/poster/icrcct2026.pdf"
+          download="ICRCCT_2026_Poster.pdf"
           className="block w-full text-left px-4 py-3 text-blue-600 font-semibold hover:bg-blue-50 transition-colors"
         >
           📥 Download Poster
@@ -185,7 +185,7 @@ function App() {
               </span>
             </h1>
             {/* <div className="inline-block bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full mb-8">
-              <p className="text-2xl sm:text-3xl font-bold text-white">ICRCCT 2k26</p>
+              <p className="text-2xl sm:text-3xl font-bold text-white">ICRCCT 2026</p>
             </div> */}
             <p className="text-xl sm:text-2xl text-white/95 mb-8 max-w-4xl mx-auto font-light">
             </p>
@@ -704,7 +704,7 @@ Sri Sairam college of Engineering      </div>
     <div className="max-w-4xl mx-auto space-y-6">
       {[
         {
-          q: "What is ICRCCT 2k26?",
+          q: "What is ICRCCT 2026?",
           a: "It is the International Conference on Recent Trends in Computing and Communication Technologies, organized by the Department of CSE in association with IEEE Computer Society, SSCE, Bangalore.",
         },
         {
@@ -766,7 +766,7 @@ Join the Whatsapp for further enquiries (Conference)    </a>
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <Globe className="w-8 h-8 text-teal-400" />
-                <span className="font-bold text-xl">ICRCCT 2k26</span>
+                <span className="font-bold text-xl">ICRCCT 2026</span>
               </div>
               <p className="text-gray-400">
                 International Conference on Recent Trends in Computing and Communication Technologies
@@ -813,7 +813,7 @@ Join the Whatsapp for further enquiries (Conference)    </a>
                         
           </div>
           <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
-            <p>&copy; 2026 ICRCCT 2k26. All rights reserved.</p>
+            <p>&copy; ICRCCT 2026. All rights reserved.</p>
           </div>
         </div>
       </footer>
