@@ -13,7 +13,7 @@ function App() {
     setShowModal(false);
   };
   const handleNo = () => {
-    window.open("mailto:icrcct2k25@sairamce.edu.in", "_blank");
+    window.open("mailto:icrcct2026@sairamce.edu.in", "_blank");
     setShowModal(false);
   };
   const handleClose = () => setShowModal(false);
@@ -320,12 +320,12 @@ function App() {
                 />
                 </svg>
                 <a
-                href="mailto:icrcct2k25@sairamce.edu.in"
+                href="mailto:icrcct2026@sairamce.edu.in"
                 className="text-blue-700 font-medium hover:underline"
                 target="_blank"
                 rel="noopener noreferrer"
                 >
-                Mail your paper to: icrcct2k25@sairamce.edu.in
+                Mail your paper to: icrcct2026@sairamce.edu.in
                 </a>
               </div>
               </div>
@@ -421,7 +421,7 @@ function App() {
         </div>
         <h3 className="text-xl font-semibold text-gray-800">Send Paper</h3>
         <p className="text-gray-600 mt-2">
-          Send your paper to the provided Mail ID within November 15, 2026.
+          Send your paper to the provided Mail ID by November 20, 2026.
         </p>
       </div>
 
@@ -521,9 +521,9 @@ function App() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { title: 'Paper Submission', date: 'November 15, 2026', icon: BookOpen },
-              { title: 'Notification', date: 'November 20, 2026', icon: Mail },
-              { title: 'Registration Deadline', date: 'November 22, 2026', icon: Calendar },
+              { title: 'Paper Submission', date: 'November 20, 2026', icon: BookOpen },
+              { title: 'Notification', date: 'November 25, 2026', icon: Mail },
+              { title: 'Registration Deadline', date: 'November 27, 2026', icon: Calendar },
               { title: 'Conference Dates', date: 'December 8 & 9, 2026', icon: Award },
             ].map((item, index) => (
               <div
@@ -589,7 +589,6 @@ Sri Sairam college of Engineering      </div>
   <div className="flex flex-wrap justify-center gap-8">
     {[
       { src: '/images/mahesh.jpg', name: 'Dr.Mahesh A', role: 'Coordinator' },
-      { src: '/images/karthika.jpg', name: 'Dr.Karthika K', role: 'Coordinator' },
     ].map((person, index) => (
       <div
         key={index}
@@ -717,7 +716,7 @@ Sri Sairam college of Engineering      </div>
         },
         {
           q: "What are the important dates?",
-          a: "Paper Submission: Nov 15, 2026 | Acceptance: Nov 20, 2026 | Registration Deadline: Nov 22, 2026.",
+          a: "Paper Submission: Nov 20, 2026 | Acceptance: Nov 25, 2026 | Registration Deadline: Nov 27, 2026.",
         },
         {
           q: "What are the registration fees?",
@@ -725,7 +724,7 @@ Sri Sairam college of Engineering      </div>
         },
         {
           q: "Who can I contact for queries?",
-          a: "Student Coordinators: Vijaya Raman (Final Year) – +91 82486 99130, Pradish A (Third Year) – +91 99865 92571. Faculty Coordinators: Dr. Mahesh A, Dr. Karthika K, Prof. Suguna A.",
+          a: "Student Coordinators: Vijaya Raman (Final Year) – +91 82486 99130, Pradish A (Third Year) – +91 99865 92571. Faculty Coordinators: Dr. Mahesh A, Prof. Suguna A.",
         },
       ].map((item, index) => (
         <div
@@ -743,7 +742,7 @@ Sri Sairam college of Engineering      </div>
     {/* WhatsApp Enquiry Link */}
     <div className="text-center mt-12">
       <a
-        href="https://chat.whatsapp.com/BJYDXOsaIIN4ZomX00WDpt?mode=wwt"
+        href="https://chat.whatsapp.com/I9BZPY6cp4VESAHVNKBQ8o"
         target="_blank"
         rel="noopener noreferrer"
         className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-full shadow-lg transition-all duration-300"
@@ -800,7 +799,6 @@ Join the Whatsapp for further enquiries (Conference)    </a>
               
               
               <p className="text-gray-400 mb-2">Dr.Mahesh A, Professor/CSE</p>
-              <p className="text-gray-400 mb-2">Dr.Karthika K, ASP/CSE</p>
               <p className="text-gray-400 mb-2">Prof.Suguna A, AP/CSE</p>
             </div>
 <div>
