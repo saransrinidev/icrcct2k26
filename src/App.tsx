@@ -18,21 +18,40 @@ function App() {
   };
   const handleClose = () => setShowModal(false);
 
-  // Poster download: show the poster in a popup for 10 seconds, then download automatically.
-  // The popup shows a lightweight preview; the download is the full-resolution original.
-  const POSTER_URL = '/images/poster/ICRCCT2026_Poster.png';
-  const POSTER_PREVIEW_URL = '/images/poster/ICRCCT2026_Poster_preview.jpg';
-  const POSTER_FILENAME = 'ICRCCT2026_Poster.png';
+  // Poster download: show both posters side by side in a popup for 10 seconds,
+  // then download both automatically. The popup shows lightweight previews;
+  // the downloads are the full-resolution originals.
+  const POSTERS = [
+    {
+      title: 'ICRCCT 2026 Conference',
+      url: '/images/poster/ICRCCT2026_Poster.png',
+      preview: '/images/poster/ICRCCT2026_Poster_preview.jpg',
+      filename: 'ICRCCT2026_Poster.png',
+      alt: 'ICRCCT 2026 conference poster with important dates, author instructions, coordinators and venue',
+    },
+    {
+      title: 'Pitchathon 2026',
+      url: '/images/poster/Pitchathon2026_Poster.png',
+      preview: '/images/poster/Pitchathon2026_Poster_preview.jpg',
+      filename: 'Pitchathon2026_Poster.png',
+      alt: 'Pitchathon poster: event on 9th December 2026, notes, faculty and student coordinators',
+    },
+  ];
   const POSTER_DELAY_SECONDS = 10;
   const [posterCountdown, setPosterCountdown] = useState<number | null>(null);
 
   const downloadPoster = () => {
-    const link = document.createElement('a');
-    link.href = POSTER_URL;
-    link.download = POSTER_FILENAME;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+    // Stagger the downloads slightly so browsers don't drop the second one.
+    POSTERS.forEach((poster, i) => {
+      setTimeout(() => {
+        const link = document.createElement('a');
+        link.href = poster.url;
+        link.download = poster.filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }, i * 800);
+    });
     setPosterCountdown(null);
   };
 
@@ -203,27 +222,37 @@ function App() {
           <div
             role="dialog"
             aria-modal="true"
-            aria-label="ICRCCT 2026 poster"
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-5xl p-3 sm:p-4"
+            aria-label="ICRCCT 2026 and Pitchathon 2026 posters"
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-7xl max-h-[92vh] overflow-y-auto p-3 sm:p-4"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               type="button"
               onClick={() => setPosterCountdown(null)}
               aria-label="Close"
-              className="absolute -top-3 -right-3 bg-white rounded-full shadow-lg p-1.5 text-gray-600 hover:text-red-500"
+              className="absolute top-2 right-2 z-10 bg-white rounded-full shadow-lg p-1.5 text-gray-600 hover:text-red-500"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <img
-              src={POSTER_PREVIEW_URL}
-              alt="ICRCCT 2026 conference poster with important dates, author instructions, coordinators and venue"
-              className="w-full h-auto max-h-[75vh] object-contain rounded-lg"
-            />
+            {/* Both posters, left and right; stacked on small screens */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+              {POSTERS.map((poster) => (
+                <figure key={poster.url} className="m-0">
+                  <img
+                    src={poster.preview}
+                    alt={poster.alt}
+                    className="w-full h-auto object-contain rounded-lg border border-gray-200"
+                  />
+                  <figcaption className="text-center text-sm font-semibold text-gray-700 mt-2">
+                    {poster.title}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
 
             <p className="text-center text-sm text-gray-600 mt-3" aria-live="polite">
-              Your download will start automatically.
+              Both posters will download automatically.
             </p>
 
             <div className="flex justify-center gap-4 mt-3">
@@ -232,7 +261,7 @@ function App() {
                 onClick={downloadPoster}
                 className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transition-all"
               >
-                Download now
+                Download both now
               </button>
               <button
                 type="button"
