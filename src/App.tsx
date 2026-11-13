@@ -778,16 +778,18 @@ Sri Sairam college of Engineering      </div>
         ].map((person, index) => (
           <div
             key={index}
-            className="relative group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 text-center"
+            className="group bg-white overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 text-center"
           >
-            <img
-              src={person.src}
-              alt={person.name}
-              className="w-full h-72 object-cover transition-transform duration-700 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center">
-              <p className="text-white font-bold text-xl">{person.name}</p>
-              <p className="text-gray-200 text-sm mt-1">{person.role}</p>
+            <div className="overflow-hidden">
+              <img
+                src={person.src}
+                alt={person.name}
+                className="w-full h-72 object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+            </div>
+            <div className="px-4 py-4">
+              <p className="text-gray-900 font-bold text-xl">{person.name}</p>
+              <p className="text-gray-600 text-sm mt-1">{person.role}</p>
             </div>
           </div>
         ))}
@@ -821,7 +823,7 @@ Sri Sairam college of Engineering      </div>
           {
             title: 'Faculty Coordinators',
             people: [
-              { src: '/images/valarmathi.png', name: 'Dr. Valarmathi C', role: 'Faculty Coordinator' },
+              { src: '/images/valarmathi_face.jpg', name: 'Dr. Valarmathi C', role: 'Faculty Coordinator' },
               { src: '/images/yamuna.png', name: 'Dr. Yamuna V', role: 'Faculty Coordinator' },
             ],
           },
@@ -846,16 +848,18 @@ Sri Sairam college of Engineering      </div>
               {group.people.map((person) => (
                 <div
                   key={person.name}
-                  className="relative group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 text-center w-72"
+                  className="group bg-white overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 text-center w-72"
                 >
-                  <img
-                    src={person.src}
-                    alt={person.name}
-                    className="w-full h-72 object-cover object-top transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center">
-                    <p className="text-white font-bold text-lg">{person.name}</p>
-                    <p className="text-gray-200 text-sm mt-1">{person.role}</p>
+                  <div className="overflow-hidden">
+                    <img
+                      src={person.src}
+                      alt={person.name}
+                      className="w-full h-72 object-cover object-top transition-transform duration-700 group-hover:scale-110"
+                    />
+                  </div>
+                  <div className="px-4 py-4">
+                    <p className="text-gray-900 font-bold text-lg">{person.name}</p>
+                    <p className="text-gray-600 text-sm mt-1">{person.role}</p>
                   </div>
                 </div>
               ))}
