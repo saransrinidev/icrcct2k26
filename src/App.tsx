@@ -1,6 +1,41 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Calendar, MapPin, Users, Award, BookOpen, Mail, ChevronDown, Globe, CheckCircle } from 'lucide-react';
 
+// Poster download: both posters are shown side by side in a popup for 10 seconds,
+// then both download automatically. The popup shows lightweight previews;
+// the downloads are the full-resolution originals.
+const POSTERS = [
+  {
+    title: 'ICRCCT 2026 Conference',
+    url: '/images/poster/ICRCCT2026_Poster.png',
+    preview: '/images/poster/ICRCCT2026_Poster_preview.jpg',
+    filename: 'ICRCCT2026_Poster.png',
+    alt: 'ICRCCT 2026 conference poster with important dates, author instructions, coordinators and venue',
+  },
+  {
+    title: 'Pitchathon 2026',
+    url: '/images/poster/Pitchathon2026_Poster.png',
+    preview: '/images/poster/Pitchathon2026_Poster_preview.jpg',
+    filename: 'Pitchathon2026_Poster.png',
+    alt: 'Pitchathon poster: event on 9th December 2026, notes, faculty and student coordinators',
+  },
+];
+const POSTER_DELAY_SECONDS = 10;
+
+function downloadAllPosters() {
+  // Stagger the downloads slightly so browsers don't drop the second one.
+  POSTERS.forEach((poster, i) => {
+    setTimeout(() => {
+      const link = document.createElement('a');
+      link.href = poster.url;
+      link.download = poster.filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }, i * 800);
+  });
+}
+
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -9,7 +44,7 @@ function App() {
 
   const handleButtonClick = () => setShowModal(true);
   const handleYes = () => {
-    window.open("https://forms.gle/qdWGK7idbRhGfCjF9", "_blank");
+    window.open("https://forms.gle/FGj5HM1U8jCwyMD8A", "_blank");
     setShowModal(false);
   };
   const handleNo = () => {
@@ -18,40 +53,10 @@ function App() {
   };
   const handleClose = () => setShowModal(false);
 
-  // Poster download: show both posters side by side in a popup for 10 seconds,
-  // then download both automatically. The popup shows lightweight previews;
-  // the downloads are the full-resolution originals.
-  const POSTERS = [
-    {
-      title: 'ICRCCT 2026 Conference',
-      url: '/images/poster/ICRCCT2026_Poster.png',
-      preview: '/images/poster/ICRCCT2026_Poster_preview.jpg',
-      filename: 'ICRCCT2026_Poster.png',
-      alt: 'ICRCCT 2026 conference poster with important dates, author instructions, coordinators and venue',
-    },
-    {
-      title: 'Pitchathon 2026',
-      url: '/images/poster/Pitchathon2026_Poster.png',
-      preview: '/images/poster/Pitchathon2026_Poster_preview.jpg',
-      filename: 'Pitchathon2026_Poster.png',
-      alt: 'Pitchathon poster: event on 9th December 2026, notes, faculty and student coordinators',
-    },
-  ];
-  const POSTER_DELAY_SECONDS = 10;
   const [posterCountdown, setPosterCountdown] = useState<number | null>(null);
 
   const downloadPoster = () => {
-    // Stagger the downloads slightly so browsers don't drop the second one.
-    POSTERS.forEach((poster, i) => {
-      setTimeout(() => {
-        const link = document.createElement('a');
-        link.href = poster.url;
-        link.download = poster.filename;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-      }, i * 800);
-    });
+    downloadAllPosters();
     setPosterCountdown(null);
   };
 
@@ -63,7 +68,8 @@ function App() {
   useEffect(() => {
     if (posterCountdown === null) return;
     if (posterCountdown === 0) {
-      downloadPoster();
+      downloadAllPosters();
+      setPosterCountdown(null);
       return;
     }
     const timer = setTimeout(() => setPosterCountdown((c) => (c === null ? null : c - 1)), 1000);
@@ -321,14 +327,13 @@ function App() {
               >
                 Join Paper Presentation
               </button>
-<a
-  href="https://forms.gle/qdWGK7idbRhGfCjF9"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="bg-gradient-to-r from-teal-600 to-blue-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 inline-block text-center"
->
-  Register Now
-</a>
+              <button
+                type="button"
+                onClick={handleButtonClick}
+                className="bg-gradient-to-r from-teal-600 to-blue-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 inline-block text-center"
+              >
+                Register Now
+              </button>
             </div>
           </div>
 
