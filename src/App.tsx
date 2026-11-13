@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Calendar, MapPin, Users, Award, BookOpen, Mail, ChevronDown, Globe } from 'lucide-react';
+import { Menu, X, Calendar, MapPin, Users, Award, BookOpen, Mail, ChevronDown, Globe, CheckCircle } from 'lucide-react';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,11 +18,54 @@ function App() {
   };
   const handleClose = () => setShowModal(false);
 
+  // Poster download: show the poster in a popup for 10 seconds, then download automatically.
+  // The popup shows a lightweight preview; the download is the full-resolution original.
+  const POSTER_URL = '/images/poster/ICRCCT2026_Poster.png';
+  const POSTER_PREVIEW_URL = '/images/poster/ICRCCT2026_Poster_preview.jpg';
+  const POSTER_FILENAME = 'ICRCCT2026_Poster.png';
+  const POSTER_DELAY_SECONDS = 10;
+  const [posterCountdown, setPosterCountdown] = useState<number | null>(null);
+
+  const downloadPoster = () => {
+    const link = document.createElement('a');
+    link.href = POSTER_URL;
+    link.download = POSTER_FILENAME;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setPosterCountdown(null);
+  };
+
+  const openPosterPopup = () => {
+    setIsMenuOpen(false);
+    setPosterCountdown(POSTER_DELAY_SECONDS);
+  };
+
+  useEffect(() => {
+    if (posterCountdown === null) return;
+    if (posterCountdown === 0) {
+      downloadPoster();
+      return;
+    }
+    const timer = setTimeout(() => setPosterCountdown((c) => (c === null ? null : c - 1)), 1000);
+    return () => clearTimeout(timer);
+  }, [posterCountdown]);
+
+  // Allow closing the poster popup with Escape
+  useEffect(() => {
+    if (posterCountdown === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setPosterCountdown(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [posterCountdown]);
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
 
-      const sections = ['home', 'about-paper', 'topics', 'dates'];
+      const sections = ['home', 'about-paper', 'about-pitchathon', 'topics', 'dates'];
       const current = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
@@ -49,6 +92,7 @@ function App() {
   const navItems = [
     { id: 'home', label: 'Home' },
     { id: 'about-paper', label: 'Paper Presentation' },
+    { id: 'about-pitchathon', label: 'Pitchathon' },
     { id: 'topics', label: 'Topics' },
     { id: 'dates', label: 'Important Dates' },
     ];
@@ -77,9 +121,9 @@ function App() {
 
       {/* Desktop Download Button */}
       <div className="hidden md:flex items-center space-x-4">
-        <a
-          href="/images/poster/icrcct2026.pdf"
-          download="ICRCCT_2026_Poster.pdf"
+        <button
+          type="button"
+          onClick={openPosterPopup}
           className={`px-4 py-2 rounded-lg transition-colors duration-300 ${
             scrolled
               ? 'bg-blue-600 text-white hover:bg-blue-700'
@@ -87,7 +131,7 @@ function App() {
           }`}
         >
           Download Poster
-        </a>
+        </button>
       </div>
 
       {/* Desktop Navigation */}
@@ -138,17 +182,69 @@ function App() {
         ))}
 
         {/* Mobile Download Button */}
-        <a
-          href="/images/poster/icrcct2026.pdf"
-          download="ICRCCT_2026_Poster.pdf"
+        <button
+          type="button"
+          onClick={openPosterPopup}
           className="block w-full text-left px-4 py-3 text-blue-600 font-semibold hover:bg-blue-50 transition-colors"
         >
           📥 Download Poster
-        </a>
+        </button>
       </div>
     )}
   </div>
 </nav>
+
+      {/* Poster download popup */}
+      {posterCountdown !== null && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 px-4"
+          onClick={() => setPosterCountdown(null)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="ICRCCT 2026 poster"
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-5xl p-3 sm:p-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setPosterCountdown(null)}
+              aria-label="Close"
+              className="absolute -top-3 -right-3 bg-white rounded-full shadow-lg p-1.5 text-gray-600 hover:text-red-500"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <img
+              src={POSTER_PREVIEW_URL}
+              alt="ICRCCT 2026 conference poster with important dates, author instructions, coordinators and venue"
+              className="w-full h-auto max-h-[75vh] object-contain rounded-lg"
+            />
+
+            <p className="text-center text-sm text-gray-600 mt-3" aria-live="polite">
+              Your download will start automatically.
+            </p>
+
+            <div className="flex justify-center gap-4 mt-3">
+              <button
+                type="button"
+                onClick={downloadPoster}
+                className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transition-all"
+              >
+                Download now
+              </button>
+              <button
+                type="button"
+                onClick={() => setPosterCountdown(null)}
+                className="border border-gray-300 text-gray-700 px-6 py-2 rounded-full font-semibold hover:bg-gray-100 transition-all"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
 
       {/* Hero Section */}
@@ -409,6 +505,97 @@ function App() {
         )}
       </>
 </section>
+
+{/* =========================
+     About Pitchathon
+========================= */}
+<section
+  id="about-pitchathon"
+  className="relative py-24 bg-gradient-to-br from-white via-purple-50 to-purple-100 overflow-hidden"
+>
+  {/* Decorative background blobs */}
+  <div className="absolute top-0 right-0 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+  <div className="absolute bottom-0 left-0 w-72 h-72 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+
+  <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      {/* Left Content */}
+      <div className="animate-fade-in-left space-y-6">
+        <div className="inline-block bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-semibold shadow-sm">
+          Event on 9th December 2026
+        </div>
+        <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+          About{" "}
+          <span className="bg-gradient-to-r from-purple-600 to-orange-500 bg-clip-text text-transparent">
+            Pitchathon
+          </span>
+        </h2>
+        <p className="text-lg text-gray-700 leading-relaxed">
+          A <strong>Pitchathon</strong> is a round in which teams present a project,
+          idea, or startup concept in a compelling, persuasive way to judges, with
+          the goal of making a strong impact.
+        </p>
+
+        <div className="space-y-4">
+          {[
+            "2 members per team",
+            "Format: PPT, PDF, URL",
+            "Offline presentation",
+            "Fee: ₹300 per team",
+          ].map((text, i) => (
+            <div key={i} className="flex items-start space-x-3">
+              <CheckCircle className="w-6 h-6 text-purple-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <p className="text-gray-700">{text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right Cards */}
+      <div className="animate-fade-in-right space-y-6">
+        {/* Rules & Regulations */}
+        <div className="bg-white/80 border border-purple-100 rounded-2xl shadow-md p-6">
+          <h3 className="text-xl font-bold text-gray-900 mb-3">Rules &amp; Regulations</h3>
+          <ol className="list-decimal list-inside space-y-2 text-gray-700">
+            <li>Each team must have exactly 2 members.</li>
+            <li>Pitches can be submitted as a PPT, PDF, or URL.</li>
+            <li>The presentation is offline; teams must present in person at the venue.</li>
+            <li>Registration is confirmed only after the entry fee is paid.</li>
+            <li>The judges&apos; decision is final.</li>
+          </ol>
+        </div>
+
+        {/* Entry Fee */}
+        <div className="bg-white/80 border border-purple-100 rounded-2xl shadow-md p-6 flex items-center justify-between gap-4">
+          <div>
+            <h3 className="text-xl font-bold text-gray-900">Entry Fee</h3>
+            <p className="text-gray-600 text-sm">Per team (2 members)</p>
+          </div>
+          <p className="text-3xl font-extrabold text-purple-700">₹300</p>
+        </div>
+
+        {/* Prizes */}
+        <div className="bg-gradient-to-r from-purple-600 to-orange-500 text-white rounded-2xl shadow-md p-6">
+          <h3 className="text-xl font-bold mb-4">Prizes</h3>
+          <div className="grid grid-cols-3 gap-3 text-center">
+            {[
+              { place: "1st Prize", amount: "To be announced" },
+              { place: "2nd Prize", amount: "To be announced" },
+              { place: "3rd Prize", amount: "To be announced" },
+            ].map((p) => (
+              <div key={p.place} className="bg-white/15 rounded-xl p-3">
+                <Award className="w-7 h-7 mx-auto mb-1" aria-hidden="true" />
+                <p className="font-semibold">{p.place}</p>
+                <p className="text-sm text-white/90">{p.amount}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="timeline" className="bg-gradient-to-r from-blue-50 to-teal-50 py-20">
   <div className="max-w-6xl mx-auto px-6 text-center">
     <h2 className="text-4xl font-bold text-gray-800 mb-16">Conference Process</h2>
@@ -580,61 +767,76 @@ Sri Sairam college of Engineering      </div>
       </div>
     </div>
 
-    {/* Faculty Coordinators */}
-<div className="mb-20">
-  <h3 className="text-2xl font-semibold text-center text-gray-800 mb-10">
-    Faculty Coordinators
-  </h3>
-
-  <div className="flex flex-wrap justify-center gap-8">
+    {/* Coordinators, grouped by event */}
     {[
-      { src: '/images/mahesh.jpg', name: 'Dr.Mahesh A', role: 'Coordinator' },
-    ].map((person, index) => (
-      <div
-        key={index}
-        className="relative group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 text-center w-72"
-      >
-        <img
-          src={person.src}
-          alt={person.name}
-          className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-        />
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center">
-          <p className="text-white font-bold text-lg">{person.name}</p>
-          <p className="text-gray-200 text-sm mt-1">{person.role}</p>
-        </div>
-      </div>
-    ))}
-  </div>
-</div>
-
-
-    {/* Student Coordinators */}
-    <div className="mb-20">
-      <h3 className="text-2xl font-semibold text-center text-gray-800 mb-10">Student Coordinators</h3>
-      <div className="flex flex-wrap justify-center gap-8">
-        {[
-          { src: '/images/placeholder.svg', name: 'Vijaya Raman', role: 'Student Coordinator' },
-          { src: '/images/placeholder.svg', name: 'Pradish A', role: 'Student Coordinator' },
-         
-        ].map((person, index) => (
-          <div
-            key={index}
-            className="relative group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 text-center w-72"
-          >
-            <img
-              src={person.src}
-              alt={person.name}
-              className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center">
-              <p className="text-white font-bold text-lg">{person.name}</p>
-              <p className="text-gray-200 text-sm mt-1">{person.role}</p>
+      {
+        event: 'Paper Presentation',
+        groups: [
+          {
+            title: 'Faculty Coordinators',
+            people: [
+              { src: '/images/mahesh.png', name: 'Dr. Mahesh A', role: 'Professor / CSE' },
+              { src: '/images/suguna.jpg', name: 'Prof. Suguna A', role: 'AP / CSE' },
+            ],
+          },
+          {
+            title: 'Student Coordinators',
+            people: [
+              { src: '/images/vijayraman.jpeg', name: 'Vijaya Raman', role: 'Final Year, CSE' },
+              { src: '/images/prathish.jpeg', name: 'Pradish A', role: 'Third Year, CSE' },
+            ],
+          },
+        ],
+      },
+      {
+        event: 'Pitchathon',
+        groups: [
+          {
+            title: 'Faculty Coordinators',
+            people: [
+              { src: '/images/valarmathi.png', name: 'Dr. Valarmathi C', role: 'Faculty Coordinator' },
+              { src: '/images/yamuna.png', name: 'Dr. Yamuna V', role: 'Faculty Coordinator' },
+            ],
+          },
+          {
+            title: 'Student Coordinators',
+            people: [
+              { src: '/images/kishore.jpeg', name: 'Kishor K', role: 'Student Coordinator' },
+              { src: '/images/kavya.jpeg', name: 'Kavya R A', role: 'Student Coordinator' },
+            ],
+          },
+        ],
+      },
+    ].map((section) => (
+      <div key={section.event} className="mb-20">
+        <h3 className="text-3xl font-bold text-center text-gray-900 mb-12">
+          {section.event} Coordinators
+        </h3>
+        {section.groups.map((group) => (
+          <div key={group.title} className="mb-14">
+            <h4 className="text-xl font-semibold text-center text-gray-700 mb-8">{group.title}</h4>
+            <div className="flex flex-wrap justify-center gap-8">
+              {group.people.map((person) => (
+                <div
+                  key={person.name}
+                  className="relative group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 text-center w-72"
+                >
+                  <img
+                    src={person.src}
+                    alt={person.name}
+                    className="w-full h-72 object-cover object-top transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center">
+                    <p className="text-white font-bold text-lg">{person.name}</p>
+                    <p className="text-gray-200 text-sm mt-1">{person.role}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         ))}
       </div>
-    </div>
+    ))}
 
 {/* {*Photo Gallery Section */}
 <section id="photos" className="py-20 bg-gradient-to-br from-blue-50 to-teal-50">
@@ -724,7 +926,7 @@ Sri Sairam college of Engineering      </div>
         },
         {
           q: "Who can I contact for queries?",
-          a: "Student Coordinators: Vijaya Raman (Final Year) – +91 82486 99130, Pradish A (Third Year) – +91 99865 92571. Faculty Coordinators: Dr. Mahesh A, Prof. Suguna A.",
+          a: "Student Coordinators: Vijaya Raman (Final Year) – +91 82486 99130, Pradish A (Third Year) – +91 99865 92571. Faculty Coordinators: Dr. Mahesh A, Prof. Suguna A. Pitchathon: Kishor K – +91 80723 41053, Kavya R A – +91 78922 80126 (Faculty: Dr. Valarmathi C, Dr. Yamuna V).",
         },
       ].map((item, index) => (
         <div
@@ -806,6 +1008,13 @@ Join the Whatsapp for further enquiries (Conference)    </a>
               <p className="text-gray-400 mb-2">Vijaya Raman - Final year - CSE - +91 82486 99130</p>
               <p className="text-gray-400 mb-2">Pradish A - 3rd year - CSE - +91 99865 92571</p>
 
+            </div>
+            <div>
+              <h3 className="pt-5 font-bold text-lg mb-4">Pitchathon Coordinators</h3>
+              <p className="text-gray-400 mb-2">Dr. Valarmathi C</p>
+              <p className="text-gray-400 mb-2">Dr. Yamuna V</p>
+              <p className="text-gray-400 mb-2">Kishor K - <a href="tel:+918072341053" className="hover:text-teal-400">+91 80723 41053</a></p>
+              <p className="text-gray-400 mb-2">Kavya R A - <a href="tel:+917892280126" className="hover:text-teal-400">+91 78922 80126</a></p>
             </div>
             </div>
                         
