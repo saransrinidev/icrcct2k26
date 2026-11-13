@@ -445,14 +445,7 @@ function App() {
 
               <div className="bg-white/80 border border-blue-100 rounded-2xl shadow-md p-6 space-y-4">
                 <h3 className="text-xl font-bold text-gray-900">Paper Format &amp; Templates</h3>
-                <ul className="space-y-2 text-gray-700">
-                  <li>
-                    <strong>Internal students:</strong> Use the IRJCS and IJIRIS templates.
-                  </li>
-                  <li>
-                    <strong>External students:</strong> Use the IJIRAE template.
-                  </li>
-                </ul>
+
                 <p className="text-gray-700">
                   Please visit the journal websites and download the appropriate paper
                   template. Ensure that your paper follows the prescribed journal format
